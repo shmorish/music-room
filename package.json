@@ -13,6 +13,8 @@
     "check:fix": "biome check --write .",
     "ci": "biome ci .",
     "type-check": "tsc --noEmit",
+    "type-check:backend": "cd backend && npm run type-check",
+    "type-check:all": "npm run type-check && npm run type-check:backend",
     "start": "react-native start",
     "test": "jest"
   },
