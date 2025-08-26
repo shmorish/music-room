@@ -13,12 +13,14 @@ export const config = {
     host: process.env.DB_HOST || 'localhost',
     port: Number.parseInt(process.env.DB_PORT || '3306', 10),
     username: process.env.DB_USERNAME || 'music_room_user',
-    password: process.env.DB_PASSWORD || (() => {
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('DB_PASSWORD is required in production');
-      }
-      return 'dev_password_only';
-    })(),
+    password:
+      process.env.DB_PASSWORD ||
+      (() => {
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error('DB_PASSWORD is required in production');
+        }
+        return 'dev_password_only';
+      })(),
     database: process.env.DB_DATABASE || 'music_room_dev',
   },
 
@@ -31,12 +33,14 @@ export const config = {
 
   // Security
   jwt: {
-    secret: process.env.JWT_SECRET || (() => {
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('JWT_SECRET is required in production');
-      }
-      return 'dev_jwt_secret_only';
-    })(),
+    secret:
+      process.env.JWT_SECRET ||
+      (() => {
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error('JWT_SECRET is required in production');
+        }
+        return 'dev_jwt_secret_only';
+      })(),
     expiresIn: process.env.JWT_EXPIRES_IN || '24h',
   },
 
