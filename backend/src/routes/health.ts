@@ -1,5 +1,5 @@
 import { type Request, type Response, Router } from 'express';
-import { getDatabaseConnection } from '../config/database';
+import { getDatabasePool } from '../config/database';
 import { getRedisConnection } from '../config/redis';
 
 const router = Router();
@@ -32,8 +32,10 @@ router.get('/', async (_req: Request, res: Response) => {
   try {
     // Check database connection
     try {
-      const db = getDatabaseConnection();
-      await db.ping();
+      const dbPool = getDatabasePool();
+      const connection = await dbPool.getConnection();
+      await connection.ping();
+      connection.release();
       healthCheck.services.database = 'connected';
     } catch (_dbError) {
       healthCheck.services.database = 'error';
@@ -62,8 +64,10 @@ router.get('/', async (_req: Request, res: Response) => {
 // Database-specific health check
 router.get('/database', async (_req: Request, res: Response) => {
   try {
-    const db = getDatabaseConnection();
-    await db.ping();
+    const dbPool = getDatabasePool();
+    const connection = await dbPool.getConnection();
+    await connection.ping();
+    connection.release();
     res.json({ status: 'ok', service: 'database', timestamp: new Date().toISOString() });
   } catch (_error) {
     res.status(503).json({

@@ -43,7 +43,13 @@ const startServer = async (): Promise<void> => {
 
     // Connect to Redis
     const redis = connectToRedis();
-    await redis.connect();
+    try {
+      await redis.connect();
+      console.log('✅ Redis connected successfully');
+    } catch (error) {
+      console.error('❌ Failed to connect to Redis:', error);
+      throw error;
+    }
 
     // Start the server
     app.listen(config.port, () => {
